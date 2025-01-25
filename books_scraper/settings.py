@@ -12,7 +12,7 @@ BOT_NAME = "books_scraper"
 SPIDER_MODULES = ["books_scraper.spiders"]
 NEWSPIDER_MODULE = "books_scraper.spiders"
 FEED_EXPORT_ENCODING = "utf-8"
-
+LOG_FILE = "log.txt"
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "books_scraper (+http://www.yourdomain.com)"
 
