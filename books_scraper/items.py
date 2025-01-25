@@ -7,5 +7,11 @@ import scrapy
 
 
 class BooksScraperItem(scrapy.Item):
+    category = scrapy.Field()
+    title = scrapy.Field()
+    rating_class = scrapy.Field()
+    image_url = scrapy.Field()
+    in_stock_yn = scrapy.Field()
+    price = scrapy.Field()
     
     pass
