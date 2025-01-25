@@ -11,8 +11,8 @@ BOT_NAME = "books_scraper"
 
 SPIDER_MODULES = ["books_scraper.spiders"]
 NEWSPIDER_MODULE = "books_scraper.spiders"
-
-
+FEED_EXPORT_ENCODING = "utf-8"
+LOG_FILE = "log.txt"
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "books_scraper (+http://www.yourdomain.com)"
 
@@ -62,9 +62,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "books_scraper.pipelines.BooksScraperPipeline": 300,
-#}
+ITEM_PIPELINES = {
+   "books_scraper.pipelines.BooksScraperPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
