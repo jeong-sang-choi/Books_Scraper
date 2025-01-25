@@ -7,5 +7,5 @@ import scrapy
 
 
 class BooksScraperItem(scrapy.Item):
-    title = scrapy.Field()
+    
     pass
