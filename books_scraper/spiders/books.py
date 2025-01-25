@@ -1,5 +1,5 @@
 import scrapy
-
+from books_scraper.items import BooksScraperItem
 
 class BooksSpider(scrapy.Spider):
     name = "books"
@@ -40,19 +40,22 @@ class BooksSpider(scrapy.Spider):
         next_page = response.css("li.next > a::attr(href)").get()
         if next_page:
             next_page_url = response.urljoin(next_page)
-            print(f"다음 페이지로 이동: {next_page_url}")
+            print(f"다음 페이지 이동: {next_page_url}")
             
-            # 다음 페이지로 이동
+            # 페이지 이동동
             yield scrapy.Request(
                 url=next_page_url,
                 callback=self.parse_maincategory,
                 meta={"maincategory_name": response.meta["maincategory_name"]}
             )
+            
     def sub_parse_maincategory(self, response):
         print("sub_parse_maincategory")
-        category = response.meta["maincategory_name"]
-        title = response.xpath("//*[@id='content_inner']/article/div[1]/div[2]/h1/text()").get()
-        in_stock_yn = response.xpath("//*[@id='content_inner']/article/div[1]/div[2]/p[2]").get()
+        total_item_dict = BooksScraperItem()
+        category = response.meta["maincategory_name"].strip()
+        title = response.xpath("//*[@id='content_inner']/article/div[1]/div[2]/h1/text()").get().strip()
+        price = float(response.css("p.price_color::text").get().replace("£",""))
+        in_stock_yn = response.xpath("//*[@id='content_inner']/article/div[1]/div[2]/p[2]").get().strip()
         if "In stock" in in_stock_yn:
             in_stock_yn = "Y"
         else:
@@ -62,8 +65,24 @@ class BooksSpider(scrapy.Spider):
         origin_image = response.css("div.thumbnail img::attr(src)").get()
         absolute_image_url = response.urljoin(origin_image).strip()
         print(category,absolute_image_url, rating_class)
-        pass
         
+        total_item_dict["title"] = title
+        total_item_dict["category"] = category
+        total_item_dict["in_stock_yn"] = in_stock_yn
+        total_item_dict["image_url"] = absolute_image_url
+        total_item_dict["rating_class"] = rating_class
+        total_item_dict["price"] = price
+        
+        yield total_item_dict
+        
+        
+        
+    # category = scrapy.Field()
+    # title = scrapy.Field()
+    # rating_class = scrapy.Field()
+    # image_url = scrapy.Field()
+    # in_stock_yn = scrapy.Field()
+    # price = scrapy.Field()
         
     def convert_to_rating(self, rating):
         if "One" in rating:
